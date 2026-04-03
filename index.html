@@ -7,56 +7,45 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg:       #0e1e1c;
-  --nav-bg:   #173330;
-  --sb-bg:    #173330;
-  --card:     #1c3835;
-  --card2:    #173330;
-  --row:      #1c3835;
-  --row-alt:  #192f2c;
-  --row-h:    #244844;
-  --border:   #2c524e;
-  --accent:   #4db8a8;
-  --text:     #d2e8e5;
-  --sub:      #7ab5ae;
-  --muted:    #4a7872;
-  --easy:     #4ade80; --easy-bg: rgba(74,222,128,.13);
-  --medium:   #fb923c; --medium-bg: rgba(251,146,60,.13);
-  --hard:     #f87171; --hard-bg:  rgba(248,113,113,.13);
-  --cat-bg:   #1e4540; --cat-txt:  #7ab5ae;
-  --solve-bg: #1a3d38; --solve-br: #4db8a8; --solve-txt: #4db8a8;
-  --star:     #fbbf24;
+  --bg:       #f0f4f3;
+  --nav-bg:   #2d7a6e;
+  --sb-bg:    #ffffff;
+  --card:     #ffffff;
+  --card2:    #f5f9f8;
+  --row:      #ffffff;
+  --row-alt:  #f8faf9;
+  --row-h:    #edf4f2;
+  --border:   #d4e4e1;
+  --accent:   #2d7a6e;
+  --text:     #1a2e2b;
+  --sub:      #547570;
+  --muted:    #96b0ac;
+  --easy:     #2d7a6e; --easy-bg: rgba(45,122,110,.1);
+  --medium:   #e07b2a; --medium-bg: rgba(224,123,42,.1);
+  --hard:     #dc3545; --hard-bg:  rgba(220,53,69,.1);
+  --cat-bg:   #edf4f2; --cat-txt:  #2d7a6e;
+  --solve-bg: #edf4f2; --solve-br: #2d7a6e; --solve-txt: #2d7a6e;
+  --star:     #e07b2a;
   --radius:   6px;
 }
-html.light {
-  --bg: #f0f4f3; --nav-bg: #2d7a6e; --sb-bg: #ffffff;
-  --card: #ffffff; --card2: #f5f9f8; --row: #ffffff; --row-alt: #f8faf9; --row-h: #edf4f2;
-  --border: #d4e4e1; --accent: #2d7a6e; --text: #1a2e2b; --sub: #547570; --muted: #96b0ac;
-  --easy: #2d7a6e; --easy-bg: rgba(45,122,110,.1);
-  --medium: #e07b2a; --medium-bg: rgba(224,123,42,.1);
-  --hard: #dc3545; --hard-bg: rgba(220,53,69,.1);
-  --cat-bg: #edf4f2; --cat-txt: #2d7a6e;
-  --solve-bg: #edf4f2; --solve-br: #2d7a6e; --solve-txt: #2d7a6e;
-  --star: #e07b2a;
-}
-/* Nav text overrides for light mode (dark teal nav bg) */
-html.light .nav { border-bottom-color: rgba(0,0,0,.12); }
-html.light .nav-title, html.light .nav-stats b { color: #ffffff; }
-html.light .nav-stats { color: rgba(255,255,255,.75); }
-html.light .nav-divider { background: rgba(255,255,255,.2); }
-html.light .switcher { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
-html.light .sw { color: rgba(255,255,255,.6); }
-html.light .sw:hover { color: #ffffff; }
-html.light .sw.on { background: rgba(255,255,255,.22); color: #ffffff; }
-html.light .nav-search input { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.2); color: #ffffff; }
-html.light .nav-search input::placeholder { color: rgba(255,255,255,.45); }
-html.light .pb-wrap { background: rgba(255,255,255,.2); }
-html.light .pb-fill { background: #ffffff; }
-html.light .nav-pct { color: #ffffff; }
-html.light .icon-btn { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.7); }
-html.light .icon-btn:hover { border-color: rgba(255,255,255,.5); color: #ffffff; }
-html.light .reset-btn { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.7); }
-html.light .reset-btn:hover { border-color: rgba(255,255,255,.45); color: #ffffff; }
+/* Nav text on dark teal nav background */
+.nav { border-bottom-color: rgba(0,0,0,.12); }
+.nav-title, .nav-stats b { color: #ffffff; }
+.nav-stats { color: rgba(255,255,255,.75); }
+.nav-divider { background: rgba(255,255,255,.2); }
+.switcher { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
+.sw { color: rgba(255,255,255,.6); }
+.sw:hover { color: #ffffff; }
+.sw.on { background: rgba(255,255,255,.22) !important; color: #ffffff !important; }
+.nav-search input { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.2); color: #ffffff; }
+.nav-search input::placeholder { color: rgba(255,255,255,.45); }
+.pb-wrap { background: rgba(255,255,255,.2); }
+.pb-fill { background: #ffffff; }
+.nav-pct { color: #ffffff; }
+.icon-btn { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.75); }
+.icon-btn:hover { border-color: rgba(255,255,255,.5); color: #ffffff; }
+.reset-btn { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.75); }
+.reset-btn:hover { border-color: rgba(255,255,255,.45); color: #ffffff; }
 html { font-size: 14px; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif;
        background: var(--bg); color: var(--text); min-height: 100vh; }
@@ -128,7 +117,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans
   cursor: pointer; border-left: 3px solid transparent; transition: background .1s; user-select: none;
 }
 .sb-link:hover { background: var(--row-h); }
-.sb-link.on { background: rgba(77,184,168,.12); border-left-color: var(--accent); }
+.sb-link.on { background: rgba(45,122,110,.1); border-left-color: var(--accent); }
 .sb-link.on .sb-lname { color: var(--accent); }
 .sb-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
 .sb-lbody { flex: 1; min-width: 0; }
@@ -340,7 +329,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans
       <div class="pb-wrap"><div class="pb-fill" id="navBar"></div></div>
       <span class="nav-pct" id="navPct">0%</span>
     </div>
-    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
     <button class="reset-btn" onclick="doReset()">Reset</button>
   </div>
 </nav>
@@ -421,12 +409,6 @@ function switchList(m) {
   renderSb(); renderMain(); updateNav();
 }
 
-// ── Theme ──
-function toggleTheme() {
-  const l=document.documentElement.classList.toggle('light');
-  localStorage.setItem('dsa_theme',l?'light':'dark');
-  document.getElementById('themeBtn').textContent=l?'☀️':'🌙';
-}
 
 function doReset() {
   if(!confirm('Reset all progress?')) return;
@@ -658,8 +640,6 @@ function renderOverview() {
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 
 function init() {
-  const t=localStorage.getItem('dsa_theme');
-  if(t==='light'){document.documentElement.classList.add('light');document.getElementById('themeBtn').textContent='☀️'}
   problems=DSA450;
   progress=JSON.parse(localStorage.getItem(SK+'_dsa450')||'{}');
   renderSb(); renderMain(); updateNav();
