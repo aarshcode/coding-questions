@@ -459,6 +459,8 @@ function refresh() { renderMain(); }
 
 // ── Main dispatch ──
 function renderMain() {
+  const isOverview = !gsearch && topic===null;
+  document.getElementById('sb').style.display = isOverview ? 'none' : '';
   if(gsearch) {
     const r=problems.filter(p=>p.problem.toLowerCase().includes(gsearch.toLowerCase()));
     renderTable(r,'Search Results',`${r.length} result${r.length!==1?'s':''} for "${esc(gsearch)}"`,problems);
