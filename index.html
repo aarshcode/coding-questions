@@ -580,12 +580,13 @@ function toggle(idx) {
   const isDone=!progress[p.problem];
   if(isDone) progress[p.problem]=true; else delete progress[p.problem];
   localStorage.setItem(SK+'_'+mode, JSON.stringify(progress));
-  // Sync same-named problems across other sheets
-  for(const [m,sheet] of [['dsa450',DSA450],['blind75',BLIND75],['sde',SDESHEET]]) {
+  // Sync problems with the same URL across other sheets
+  if(p.url) for(const [m,sheet] of [['dsa450',DSA450],['blind75',BLIND75],['sde',SDESHEET]]) {
     if(m===mode) continue;
-    if(!sheet.some(q=>q.problem===p.problem)) continue;
+    const matches=sheet.filter(q=>q.url&&q.url===p.url);
+    if(!matches.length) continue;
     const other=JSON.parse(localStorage.getItem(SK+'_'+m)||'{}');
-    if(isDone) other[p.problem]=true; else delete other[p.problem];
+    for(const q of matches) { if(isDone) other[q.problem]=true; else delete other[q.problem]; }
     localStorage.setItem(SK+'_'+m, JSON.stringify(other));
   }
   updateNav(); patchSb(p.topic); refresh();
