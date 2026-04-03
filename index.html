@@ -577,8 +577,17 @@ function updateNav() {
 // ── Toggle ──
 function toggle(idx) {
   const p=problems[idx];
-  if(progress[p.problem]) delete progress[p.problem]; else progress[p.problem]=true;
+  const isDone=!progress[p.problem];
+  if(isDone) progress[p.problem]=true; else delete progress[p.problem];
   localStorage.setItem(SK+'_'+mode, JSON.stringify(progress));
+  // Sync same-named problems across other sheets
+  for(const [m,sheet] of [['dsa450',DSA450],['blind75',BLIND75],['sde',SDESHEET]]) {
+    if(m===mode) continue;
+    if(!sheet.some(q=>q.problem===p.problem)) continue;
+    const other=JSON.parse(localStorage.getItem(SK+'_'+m)||'{}');
+    if(isDone) other[p.problem]=true; else delete other[p.problem];
+    localStorage.setItem(SK+'_'+m, JSON.stringify(other));
+  }
   updateNav(); patchSb(p.topic); refresh();
 }
 
