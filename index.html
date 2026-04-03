@@ -7,45 +7,27 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg:       #f0f4f3;
-  --nav-bg:   #2d7a6e;
-  --sb-bg:    #ffffff;
-  --card:     #ffffff;
-  --card2:    #f5f9f8;
-  --row:      #ffffff;
-  --row-alt:  #f8faf9;
-  --row-h:    #edf4f2;
-  --border:   #d4e4e1;
-  --accent:   #2d7a6e;
-  --text:     #1a2e2b;
-  --sub:      #547570;
-  --muted:    #96b0ac;
-  --easy:     #2d7a6e; --easy-bg: rgba(45,122,110,.1);
-  --medium:   #e07b2a; --medium-bg: rgba(224,123,42,.1);
-  --hard:     #dc3545; --hard-bg:  rgba(220,53,69,.1);
-  --cat-bg:   #edf4f2; --cat-txt:  #2d7a6e;
-  --solve-bg: #edf4f2; --solve-br: #2d7a6e; --solve-txt: #2d7a6e;
-  --star:     #e07b2a;
+  --bg:       #1a1a1a;
+  --nav-bg:   #1e1e1e;
+  --sb-bg:    #1e1e1e;
+  --card:     #242424;
+  --card2:    #1e1e1e;
+  --row:      #242424;
+  --row-alt:  #202020;
+  --row-h:    #2c2c2c;
+  --border:   #333333;
+  --accent:   #2f8d46;
+  --text:     #e8e8e8;
+  --sub:      #999999;
+  --muted:    #555555;
+  --easy:     #2f8d46; --easy-bg: rgba(47,141,70,.15);
+  --medium:   #f4a31b; --medium-bg: rgba(244,163,27,.15);
+  --hard:     #f44336; --hard-bg:  rgba(244,67,54,.15);
+  --cat-bg:   #1e2d21; --cat-txt:  #2f8d46;
+  --solve-bg: #1e2d21; --solve-br: #2f8d46; --solve-txt: #2f8d46;
+  --star:     #f4a31b;
   --radius:   6px;
 }
-/* Nav text on dark teal nav background */
-.nav { border-bottom-color: rgba(0,0,0,.12); }
-.nav-title, .nav-stats b { color: #ffffff; }
-.nav-stats { color: rgba(255,255,255,.75); }
-.nav-divider { background: rgba(255,255,255,.2); }
-.switcher { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
-.sw { color: rgba(255,255,255,.6); }
-.sw:hover { color: #ffffff; }
-.sw.on { background: rgba(255,255,255,.92) !important; color: #2d7a6e !important; }
-.nav-search input { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.2); color: #ffffff; }
-.nav-search input::placeholder { color: rgba(255,255,255,.45); }
-.pb-wrap { background: rgba(255,255,255,.2); }
-.pb-fill { background: #ffffff; }
-.nav-pct { color: #ffffff; }
-.icon-btn { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.75); }
-.icon-btn:hover { border-color: rgba(255,255,255,.5); color: #ffffff; }
-.reset-btn { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.75); }
-.reset-btn:hover { border-color: rgba(255,255,255,.45); color: #ffffff; }
 html { font-size: 14px; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif;
        background: var(--bg); color: var(--text); min-height: 100vh; }
@@ -75,12 +57,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans
 .sw:hover { color: var(--text); }
 .sw.on { background: var(--accent); color: #fff; }
 .nav-search { flex: 1; max-width: 380px; position: relative; }
-.nav-search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,.55); }
+.nav-search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); }
 .nav-search input {
   width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 22px;
   padding: 7px 12px 7px 33px; color: var(--text); font-size: 13px; outline: none; transition: border-color .15s;
 }
-.nav-search input:focus { border-color: rgba(255,255,255,.6); }
+.nav-search input:focus { border-color: var(--accent); }
 .nav-search input::placeholder { color: var(--muted); }
 .nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .nav-stats { font-size: 12px; color: var(--sub); display: flex; align-items: center; gap: 10px; }
@@ -117,7 +99,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans
   cursor: pointer; border-left: 3px solid transparent; transition: background .1s; user-select: none;
 }
 .sb-link:hover { background: var(--row-h); }
-.sb-link.on { background: rgba(45,122,110,.1); border-left-color: var(--accent); }
+.sb-link.on { background: rgba(47,141,70,.12); border-left-color: var(--accent); }
 .sb-link.on .sb-lname { color: var(--accent); }
 .sb-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
 .sb-lbody { flex: 1; min-width: 0; }
