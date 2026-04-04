@@ -250,6 +250,9 @@ body {
   </div>
   <div class="nav-right">
     <div class="nav-stats"><b><span id="navDone">0</span>/<span id="navTotal">0</span></b> solved</div>
+    <button class="reset-btn" onclick="doExport()">⬇ Export</button>
+    <button class="reset-btn" onclick="document.getElementById('importFile').click()">⬆ Import</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="doImport(this)"/>
     <button class="reset-btn" onclick="doReset()">Reset</button>
   </div>
 </nav>
@@ -988,6 +991,65 @@ function setStatus(s, render = true) {
     if (el) el.classList.toggle('on', k === s);
   });
   if (render) renderProblems();
+}
+
+function doExport() {
+  const allProgress = {};
+  for (const m of ['dsa450','blind75','sde','nc150','grind75']) {
+    const data = localStorage.getItem(SK+'_'+m);
+    if (data) allProgress[m] = JSON.parse(data);
+  }
+  const blob = new Blob([JSON.stringify(allProgress, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dsa-progress.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function doImport(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    let data;
+    try {
+      data = JSON.parse(e.target.result);
+    } catch {
+      alert('Error: File is not valid JSON.\n\nPlease use a file exported from this tracker (dsa-progress.json).');
+      return;
+    }
+    if (typeof data !== 'object' || Array.isArray(data) || data === null) {
+      alert('Error: Expected a JSON object at the top level.\n\nPlease use a file exported from this tracker.');
+      return;
+    }
+    const validKeys = ['dsa450','blind75','sde','nc150','grind75'];
+    const foundKeys = Object.keys(data).filter(k => validKeys.includes(k));
+    if (foundKeys.length === 0) {
+      alert('Error: No recognised sheet keys found.\n\nExpected one or more of: ' + validKeys.join(', ') + '\n\nPlease use a file exported from this tracker.');
+      return;
+    }
+    for (const k of foundKeys) {
+      if (typeof data[k] !== 'object' || Array.isArray(data[k]) || data[k] === null) {
+        alert(`Error: Value for "${k}" must be an object, got ${Array.isArray(data[k]) ? 'array' : typeof data[k]}.\n\nPlease use a file exported from this tracker.`);
+        return;
+      }
+      for (const [prob, val] of Object.entries(data[k])) {
+        if (typeof val !== 'boolean') {
+          alert(`Error: Progress values must be booleans, but "${prob}" in "${k}" has value: ${JSON.stringify(val)}.\n\nPlease use a file exported from this tracker.`);
+          return;
+        }
+      }
+    }
+    for (const m of foundKeys) {
+      localStorage.setItem(SK+'_'+m, JSON.stringify(data[m]));
+    }
+    progress = JSON.parse(localStorage.getItem(SK+'_'+mode) || '{}');
+    renderMain();
+    alert(`Progress imported successfully for: ${foundKeys.join(', ')}`);
+  };
+  reader.readAsText(file);
+  input.value = '';
 }
 
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
