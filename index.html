@@ -288,6 +288,54 @@ body {
   .pt-header span:nth-child(3), .p-row .p-topic { display: none; }
   .container { padding: 16px 12px; }
 }
+
+/* DARK THEME */
+body.dark {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --sub: #8b949e;
+  --muted: #6e7681;
+  --link: #58a6ff;
+  --shadow: 4px 4px 0 #000;
+  background: #0d1117;
+  background-image: radial-gradient(circle, #1c2128 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+body.dark .nav { background: #161b22; border-bottom-color: var(--accent); box-shadow: 0 3px 0 var(--accent2); }
+body.dark .nav-logo { color: #e6edf3; }
+body.dark .reset-btn { background: #21262d; border-color: #30363d; color: #8b949e; box-shadow: 3px 3px 0 #000; }
+body.dark .reset-btn:hover { border-color: #e53935; color: #e53935; box-shadow: 2px 2px 0 #000; }
+body.dark .list-tab { background: #161b22; color: #6e7681; border-right-color: var(--accent); }
+body.dark .list-tab:hover:not(.on) { background: rgba(42,158,82,.15); color: var(--accent); }
+body.dark .progress-section { background: #161b22; box-shadow: 5px 5px 0 #000; }
+body.dark .prog-track { background: #21262d; border-color: #30363d; }
+body.dark .f-search input { background: #161b22; border-color: #30363d; color: #e6edf3; box-shadow: 3px 3px 0 #000; }
+body.dark .f-search input::placeholder { color: #6e7681; }
+body.dark .f-select { background: #161b22; border-color: #30363d; color: #e6edf3; box-shadow: 3px 3px 0 #000;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236e7681' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; }
+body.dark .f-select option { background: #161b22; color: #e6edf3; }
+body.dark .status-tabs { background: #161b22; border-color: #30363d; box-shadow: 3px 3px 0 #000; }
+body.dark .s-tab { color: #6e7681; border-right-color: #30363d; }
+body.dark .s-tab:hover:not(.on) { color: #e6edf3; background: #21262d; }
+body.dark .ptable { background: #161b22; box-shadow: 6px 6px 0 #000; border-color: #30363d; }
+body.dark .pt-header { background: #21262d; border-bottom-color: #30363d; }
+body.dark .tg-header { border-bottom-color: #30363d; }
+body.dark .tg-header:hover { filter: brightness(1.15); }
+body.dark .p-row { border-bottom-color: #21262d; }
+body.dark .p-row:hover { background: #1c2128; }
+body.dark .p-row.solved .p-name,
+body.dark .p-row.solved .p-name-plain { color: #484f58; text-decoration-color: #484f58; }
+body.dark .p-chk { background: #0d1117; border-color: #30363d; box-shadow: 2px 2px 0 #000; }
+body.dark .notes-btn { background: #161b22; border-color: #30363d; color: #6e7681; box-shadow: 2px 2px 0 #000; }
+body.dark .note-modal-box { background: #161b22; box-shadow: 8px 8px 0 #000; }
+body.dark .note-textarea { background: #0d1117; border-color: #30363d; color: #e6edf3; box-shadow: inset 2px 2px 0 #000; }
+body.dark .note-textarea:focus { box-shadow: inset 2px 2px 0 #1a3a2a; }
+body.dark .note-close-btn { background: #21262d; border-color: #30363d; color: #8b949e; box-shadow: 3px 3px 0 #000; }
+body.dark .note-close-btn:hover { border-color: #e53935; color: #e53935; box-shadow: 2px 2px 0 #000; }
+body.dark #theme-btn { background: #21262d; }
 </style>
 </head>
 <body>
@@ -299,6 +347,7 @@ body {
   </div>
   <div class="nav-right">
     <div class="nav-stats"><b><span id="navDone">0</span>/<span id="navTotal">0</span></b> solved</div>
+    <button id="theme-btn" class="reset-btn" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
     <button class="reset-btn" onclick="doExport()">⬇ Export</button>
     <button class="reset-btn" onclick="document.getElementById('importFile').click()">⬆ Import</button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="doImport(this)"/>
@@ -951,6 +1000,14 @@ function renderProblems() {
   if (statusFilter === 'done') probs = probs.filter(p => done(p));
 
   const body = document.getElementById('ptable-body');
+
+  // Preserve expanded groups across re-renders
+  const expandedTopics = new Set();
+  body.querySelectorAll('.tg-header').forEach(hdr => {
+    if (!hdr.nextElementSibling.classList.contains('hidden'))
+      expandedTopics.add(hdr.querySelector('.tg-name').textContent);
+  });
+
   if (!probs.length) {
     body.innerHTML = '<div class="empty-msg">No problems match your filters.</div>';
     return;
@@ -965,10 +1022,10 @@ function renderProblems() {
     const doneCount = allInTopic.filter(done).length;
     const col = topicColor(t);
     html += `<div class="tg-header" onclick="toggleGroup(this)" style="border-left-color:${col};background:${col}18">
-      <span class="tg-arrow" style="color:${col}">&#9660;</span>
+      <span class="tg-arrow col" style="color:${col}">&#9660;</span>
       <span class="tg-name" style="color:${col}">${esc(t)}</span>
       <span class="tg-count">${doneCount}/${allInTopic.length} completed</span>
-    </div><div class="tg-rows">`;
+    </div><div class="tg-rows hidden">`;
     for (const p of tprobs) {
       const idx = problems.indexOf(p);
       const isDone = done(p);
@@ -994,6 +1051,15 @@ function renderProblems() {
     html += '</div>';
   }
   body.innerHTML = html;
+
+  // Restore expanded groups
+  body.querySelectorAll('.tg-header').forEach(hdr => {
+    const topicName = hdr.querySelector('.tg-name').textContent;
+    if (expandedTopics.has(topicName)) {
+      hdr.nextElementSibling.classList.remove('hidden');
+      hdr.querySelector('.tg-arrow').classList.remove('col');
+    }
+  });
 }
 
 function toggleGroup(hdr) {
@@ -1160,10 +1226,20 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNote();
 
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
+function toggleDark() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem(SK+'_dark', isDark ? '1' : '0');
+  document.getElementById('theme-btn').textContent = isDark ? '☀️' : '🌙';
+}
+
 function init() {
   problems = DSA450;
   progress = JSON.parse(localStorage.getItem(SK+'_dsa450') || '{}');
   notes = JSON.parse(localStorage.getItem(SK+'_notes') || '{}');
+  if (localStorage.getItem(SK+'_dark') === '1') {
+    document.body.classList.add('dark');
+    document.getElementById('theme-btn').textContent = '☀️';
+  }
   renderMain();
 }
 init();
