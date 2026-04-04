@@ -592,7 +592,13 @@ fbAuth.onAuthStateChanged(user => {
   const btn = document.getElementById('auth-btn');
   if (!btn) return;
   if (user) {
-    const name = user.displayName ? user.displayName.split(' ')[0] : 'Account';
+    const name = user.displayName
+      ? user.displayName.split(' ')[0]
+      : user.email
+        ? user.email.split('@')[0]
+        : (user.providerData[0] && user.providerData[0].displayName)
+          ? user.providerData[0].displayName.split(' ')[0]
+          : 'User';
     btn.textContent = name + ' (sign out)';
     btn.title = user.email;
     btn.classList.add('signed-in');
