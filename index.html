@@ -426,16 +426,15 @@ function syncToFirebase() {
   if (!currentUser) return;
   clearTimeout(syncTimer);
   syncTimer = setTimeout(() => {
-    const allProgress = {};
+    // Store as JSON strings to avoid Firebase key restrictions (dots, brackets, etc.)
+    const payload = {};
     for (const m of ['dsa450','blind75','sde','nc150','grind75']) {
       const d = localStorage.getItem(SK+'_'+m);
-      if (d) allProgress[m] = JSON.parse(d);
+      if (d) payload[m] = d; // store raw JSON string, not parsed object
     }
     const notesData = localStorage.getItem(SK+'_notes');
-    fbDb.ref('users/' + currentUser.uid).set({
-      progress: allProgress,
-      notes: notesData ? JSON.parse(notesData) : {}
-    });
+    if (notesData) payload['notes'] = notesData;
+    fbDb.ref('users/' + currentUser.uid).set(payload);
   }, 800);
 }
 
@@ -444,22 +443,16 @@ function setupRealtimeSync(uid) {
     const data = snap.val();
     if (!data) { syncToFirebase(); return; } // first login — push local data up
     let changed = false;
-    if (data.progress) {
-      for (const [m, v] of Object.entries(data.progress)) {
-        const incoming = JSON.stringify(v);
-        if (localStorage.getItem(SK+'_'+m) !== incoming) {
-          localStorage.setItem(SK+'_'+m, incoming);
-          changed = true;
-        }
-      }
-    }
-    if (data.notes) {
-      const incoming = JSON.stringify(data.notes);
-      if (localStorage.getItem(SK+'_notes') !== incoming) {
-        localStorage.setItem(SK+'_notes', incoming);
-        notes = data.notes;
+    for (const m of ['dsa450','blind75','sde','nc150','grind75']) {
+      if (data[m] && localStorage.getItem(SK+'_'+m) !== data[m]) {
+        localStorage.setItem(SK+'_'+m, data[m]);
         changed = true;
       }
+    }
+    if (data.notes && localStorage.getItem(SK+'_notes') !== data.notes) {
+      localStorage.setItem(SK+'_notes', data.notes);
+      notes = JSON.parse(data.notes);
+      changed = true;
     }
     if (changed) {
       progress = JSON.parse(localStorage.getItem(SK+'_'+mode) || '{}');
