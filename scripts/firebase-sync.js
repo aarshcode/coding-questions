@@ -46,7 +46,9 @@ function setupRealtimeSync(uid) {
       changed = true;
     }
     if (changed) {
-      progress = JSON.parse(localStorage.getItem(SK+'_'+mode) || '{}');
+      progress = (mode === 'dsa450' || mode === 'blind75' || mode === 'sde' || mode === 'nc150' || mode === 'grind75')
+        ? JSON.parse(localStorage.getItem(SK+'_'+mode) || '{}')
+        : {};
       renderMain();
     }
   });
@@ -108,4 +110,3 @@ fbAuth.onAuthStateChanged(user => {
   }
 });
 // ─────────────────────────────────────────────────────────────────────────
-

@@ -30,7 +30,7 @@
 <nav class="nav">
   <div class="nav-brand">
     <span class="nav-logo">DSA <span>Tracker</span></span>
-    <span class="nav-tagline">450 curated problems · Track your journey</span>
+    <span class="nav-tagline">Curated problems · Track your journey</span>
   </div>
   <div class="nav-right">
     <div class="nav-stats"><b><span id="navDone">0</span>/<span id="navTotal">0</span></b> solved</div>
@@ -68,12 +68,16 @@
 
 <div class="container">
   <div class="list-tabs">
-    <button class="list-tab on" id="sw-dsa" onclick="switchList('dsa450')">&#x1F4E6; 450 DSA</button>
+    <button class="list-tab on" id="sw-home" onclick="switchList('overview')">&#x1F3E0; Overview</button>
+    <button class="list-tab" id="sw-dsa" onclick="switchList('dsa450')">&#x1F4E6; 450 DSA</button>
     <button class="list-tab" id="sw-b75" onclick="switchList('blind75')">&#x1F441; Blind 75</button>
     <button class="list-tab" id="sw-sde" onclick="switchList('sde')">&#x1F4CB; SDE Sheet</button>
     <button class="list-tab" id="sw-nc" onclick="switchList('nc150')">&#x1F3AF; NeetCode 150</button>
     <button class="list-tab" id="sw-g75" onclick="switchList('grind75')">&#x26A1; Grind 169</button>
   </div>
+  <section class="overview-panel" id="overview-panel"></section>
+  <section class="sheet-stats-grid section-hidden" id="sheet-stats-grid"></section>
+  <div id="sheet-view" class="section-hidden">
   <div class="progress-section">
     <div class="prog-label" id="prog-label">0/448 completed (0%)</div>
     <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
@@ -99,6 +103,7 @@
       <span></span><span>#</span><span>Title</span><span>Topic</span><span>Action</span>
     </div>
     <div id="ptable-body"></div>
+  </div>
   </div>
 </div>
 
