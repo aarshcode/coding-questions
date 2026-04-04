@@ -337,16 +337,60 @@ body {
 }
 
 /* RESPONSIVE */
-@media(max-width: 768px) {
-  .pt-header, .p-row { grid-template-columns: 44px 30px 1fr 90px; }
-  .pt-header span:nth-child(4), .p-row .p-action { display: none; }
-  .list-tab { font-size: 14px; padding: 11px 4px; }
+@media (max-width: 900px) {
+  .pt-header { grid-template-columns: 44px 30px 1fr 100px; }
+  .pt-header span:nth-child(4) { display: none; }
+  .p-row { grid-template-columns: 44px 30px 1fr 100px; }
+  .p-row .p-topic { display: none; }
 }
-@media(max-width: 520px) {
-  .pt-header, .p-row { grid-template-columns: 44px 1fr; }
-  .pt-header span:nth-child(2), .p-row .p-rownum { display: none; }
-  .pt-header span:nth-child(3), .p-row .p-topic { display: none; }
+
+@media (max-width: 768px) {
+  .nav { padding: 0 16px; height: 58px; gap: 10px; }
+  .nav-tagline { display: none; }
+  .nav-logo { font-size: 24px; letter-spacing: 2px; }
+
   .container { padding: 16px 12px; }
+
+  .list-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
+  .list-tab { flex-shrink: 0; font-size: 13px; padding: 12px 10px; scroll-snap-align: start; }
+
+  .filter-bar { gap: 8px; }
+  .f-search { max-width: 100%; flex: 1 1 180px; }
+
+  .auth-btn { font-size: 10px; padding: 5px 10px; letter-spacing: 0; }
+}
+
+@media (max-width: 540px) {
+  .nav { padding: 0 12px; gap: 8px; }
+  .nav-logo { font-size: 20px; }
+  .nav-stats { display: none; }
+  .auth-btn { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .list-tab { font-size: 11px; padding: 11px 8px; letter-spacing: .5px; }
+
+  .tg-header { padding: 11px 14px; gap: 10px; }
+  .tg-name { font-size: 18px; }
+
+  .pt-header { display: none; }
+  .p-row { grid-template-columns: 44px 1fr auto; padding: 0 14px; min-height: 56px; }
+  .p-rownum { display: none; }
+  .p-topic { display: none; }
+  .p-action { flex-direction: column; gap: 4px; align-items: flex-end; }
+  .solve-btn { display: none; } /* title link already opens problem */
+  .no-solve { display: none; }
+
+  .filter-bar { flex-direction: column; align-items: stretch; gap: 8px; }
+  .f-search { max-width: 100%; }
+  .f-select { width: 100%; }
+  .status-tabs { width: 100%; }
+  .s-tab { flex: 1; text-align: center; padding: 10px 4px; }
+
+  .progress-section { padding: 12px 14px; }
+  .prog-label { font-size: 17px; }
+
+  .signin-box { padding: 24px 18px; margin: 0 12px; min-width: 0; width: 100%; }
+
+  .note-modal-box { padding: 18px; }
 }
 
 /* DARK THEME */
