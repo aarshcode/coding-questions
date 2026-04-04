@@ -220,6 +220,55 @@ body {
 .solve-btn:hover { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(0,0,0,.2); filter: brightness(.92); }
 .no-solve { color: var(--muted); font-size: 13px; }
 
+/* NOTES BUTTON */
+.p-action { display: flex; align-items: center; gap: 8px; }
+.notes-btn {
+  width: 26px; height: 26px; border: 2px solid #ccc; border-radius: 3px;
+  background: #fff; color: #bbb; cursor: pointer; font-size: 13px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 2px 2px 0 #bbb; transition: all .1s; flex-shrink: 0; padding: 0;
+}
+.notes-btn:hover { border-color: var(--accent); color: var(--accent); transform: translate(1px,1px); box-shadow: 1px 1px 0 #bbb; }
+.notes-btn.has-note { border-color: #e6a800; color: #e6a800; background: #fffde7; box-shadow: 2px 2px 0 #c8940a; }
+.notes-btn.has-note:hover { filter: brightness(.92); }
+
+/* NOTES MODAL */
+.note-modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1000;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.note-modal-box {
+  background: #fff; border: 3px solid var(--border); border-radius: 4px;
+  box-shadow: 8px 8px 0 #aaa; width: 100%; max-width: 560px;
+  display: flex; flex-direction: column; gap: 16px; padding: 24px;
+}
+.note-modal-title {
+  font-family: 'Bangers', cursive; font-size: 18px; letter-spacing: 1.5px;
+  color: var(--text); text-transform: uppercase; line-height: 1.3;
+}
+.note-textarea {
+  width: 100%; min-height: 160px; padding: 12px; border: 2px solid #ccc;
+  border-radius: 3px; font-size: 14px; font-family: inherit; resize: vertical;
+  line-height: 1.6; outline: none; box-shadow: inset 2px 2px 0 #eee;
+  color: var(--text); background: #fafafa;
+}
+.note-textarea:focus { border-color: var(--accent); box-shadow: inset 2px 2px 0 #ddf0e0; }
+.note-modal-btns { display: flex; gap: 10px; justify-content: flex-end; }
+.note-save-btn {
+  font-family: 'Bangers', cursive; font-size: 16px; letter-spacing: 1.5px;
+  text-transform: uppercase; border: 2px solid var(--accent); background: var(--accent);
+  color: #fff; padding: 8px 20px; border-radius: 3px; cursor: pointer;
+  box-shadow: 3px 3px 0 var(--accent2); transition: all .1s;
+}
+.note-save-btn:hover { transform: translate(1px,1px); box-shadow: 2px 2px 0 var(--accent2); filter: brightness(.95); }
+.note-close-btn {
+  font-family: 'Bangers', cursive; font-size: 16px; letter-spacing: 1.5px;
+  text-transform: uppercase; border: 2px solid #ccc; background: #fff;
+  color: var(--sub); padding: 8px 20px; border-radius: 3px; cursor: pointer;
+  box-shadow: 3px 3px 0 #bbb; transition: all .1s;
+}
+.note-close-btn:hover { border-color: #e53935; color: #e53935; transform: translate(1px,1px); box-shadow: 2px 2px 0 #bbb; }
+
 /* EMPTY */
 .empty-msg {
   text-align: center; padding: 60px 20px;
@@ -274,7 +323,7 @@ body {
       <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
-      <input id="gSearch" type="text" placeholder="Search problemsâ¦" oninput="onGSearch(this.value)"/>
+      <input id="gSearch" type="text" placeholder="Search problems..." oninput="onGSearch(this.value)"/>
     </div>
     <select class="f-select" id="topic-sel" onchange="setTopicFilter(this.value)">
       <option value="all">All Topics</option>
@@ -290,6 +339,17 @@ body {
       <span></span><span>#</span><span>Title</span><span>Topic</span><span>Action</span>
     </div>
     <div id="ptable-body"></div>
+  </div>
+</div>
+
+<div id="note-modal" class="note-modal" style="display:none" onclick="if(event.target===this)closeNote()">
+  <div class="note-modal-box">
+    <div class="note-modal-title" id="note-modal-title"></div>
+    <textarea id="note-textarea" class="note-textarea" placeholder="Add your notes, approach, time/space complexity, links…"></textarea>
+    <div class="note-modal-btns">
+      <button class="note-close-btn" onclick="closeNote()">Cancel</button>
+      <button class="note-save-btn" onclick="saveNote()">Save Note</button>
+    </div>
   </div>
 </div>
 
@@ -848,6 +908,7 @@ const GRIND75 = [
 
 
 let mode = 'dsa450', problems = DSA450, progress = {};
+let notes = {}, noteIdx = -1;
 let topicFilter = 'all', statusFilter = 'all', gsearch = '';
 
 const PALETTE = [
@@ -919,12 +980,15 @@ function renderProblems() {
         ? `<a class="solve-btn" href="${esc(p.url)}" target="_blank" rel="noopener" style="border-color:${col};color:${col};background:${col}15">Solve</a>`
         : `<span class="no-solve">—</span>`;
       const chkStyle = isDone ? `style="background:${col};border-color:${col}"` : '';
+      const hasNote = !!(notes[p.problem] && notes[p.problem].trim());
+      const noteBtnCls = hasNote ? ' has-note' : '';
+      const noteTitle = hasNote ? 'Edit note' : 'Add note';
       html += `<div class="p-row${isDone?' solved':''}" style="border-left-color:${isDone?col:'transparent'}">
         <div><div class="p-chk${isDone?' on':''}" ${chkStyle} onclick="toggle(${idx})"></div></div>
         <div class="p-rownum">${rowNum}</div>
         <div class="p-title-cell">${nameEl}</div>
         <div class="p-topic"><span class="topic-chip" style="border-color:${col};color:${col};background:${col}15">${esc(t)}</span></div>
-        <div class="p-action">${actionEl}</div>
+        <div class="p-action">${actionEl}<button class="notes-btn${noteBtnCls}" onclick="openNote(${idx})" title="${noteTitle}">✎</button></div>
       </div>`;
     }
     html += '</div>';
@@ -999,6 +1063,8 @@ function doExport() {
     const data = localStorage.getItem(SK+'_'+m);
     if (data) allProgress[m] = JSON.parse(data);
   }
+  const notesData = localStorage.getItem(SK+'_notes');
+  if (notesData) allProgress.notes = JSON.parse(notesData);
   const blob = new Blob([JSON.stringify(allProgress, null, 2)], {type: 'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1025,7 +1091,7 @@ function doImport(input) {
     }
     const validKeys = ['dsa450','blind75','sde','nc150','grind75'];
     const foundKeys = Object.keys(data).filter(k => validKeys.includes(k));
-    if (foundKeys.length === 0) {
+    if (foundKeys.length === 0 && !data.notes) {
       alert('Error: No recognised sheet keys found.\n\nExpected one or more of: ' + validKeys.join(', ') + '\n\nPlease use a file exported from this tracker.');
       return;
     }
@@ -1041,22 +1107,63 @@ function doImport(input) {
         }
       }
     }
+    if (data.notes !== undefined) {
+      if (typeof data.notes !== 'object' || Array.isArray(data.notes) || data.notes === null) {
+        alert(`Error: "notes" must be an object.\n\nPlease use a file exported from this tracker.`);
+        return;
+      }
+      for (const [prob, val] of Object.entries(data.notes)) {
+        if (typeof val !== 'string') {
+          alert(`Error: Note values must be strings, but "${prob}" has value: ${JSON.stringify(val)}.\n\nPlease use a file exported from this tracker.`);
+          return;
+        }
+      }
+      localStorage.setItem(SK+'_notes', JSON.stringify(data.notes));
+      notes = data.notes;
+    }
     for (const m of foundKeys) {
       localStorage.setItem(SK+'_'+m, JSON.stringify(data[m]));
     }
     progress = JSON.parse(localStorage.getItem(SK+'_'+mode) || '{}');
     renderMain();
-    alert(`Progress imported successfully for: ${foundKeys.join(', ')}`);
+    const imported = [...foundKeys, ...(data.notes ? ['notes'] : [])];
+    alert(`Progress imported successfully for: ${imported.join(', ')}`);
   };
   reader.readAsText(file);
   input.value = '';
 }
+
+function openNote(idx) {
+  noteIdx = idx;
+  const p = problems[idx];
+  document.getElementById('note-modal-title').textContent = p.problem;
+  document.getElementById('note-textarea').value = notes[p.problem] || '';
+  document.getElementById('note-modal').style.display = 'flex';
+  document.getElementById('note-textarea').focus();
+}
+
+function saveNote() {
+  if (noteIdx < 0) return;
+  const p = problems[noteIdx];
+  const val = document.getElementById('note-textarea').value.trim();
+  if (val) notes[p.problem] = val; else delete notes[p.problem];
+  localStorage.setItem(SK+'_notes', JSON.stringify(notes));
+  closeNote();
+  renderProblems();
+}
+
+function closeNote() {
+  noteIdx = -1;
+  document.getElementById('note-modal').style.display = 'none';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNote(); });
 
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
 function init() {
   problems = DSA450;
   progress = JSON.parse(localStorage.getItem(SK+'_dsa450') || '{}');
+  notes = JSON.parse(localStorage.getItem(SK+'_notes') || '{}');
   renderMain();
 }
 init();
