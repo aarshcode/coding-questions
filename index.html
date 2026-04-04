@@ -58,6 +58,66 @@ body {
 }
 .reset-btn:hover { border-color: #e53935; color: #e53935; transform: translate(1px,1px); box-shadow: 2px 2px 0 #bbb; }
 
+/* SETTINGS DROPDOWN */
+.settings-wrap { position: relative; }
+.settings-gear {
+  border: 2px solid #ccc; background: #fff; color: var(--sub);
+  width: 34px; height: 34px; border-radius: 3px; cursor: pointer;
+  font-size: 16px; box-shadow: 3px 3px 0 #bbb; transition: all .1s;
+  display: flex; align-items: center; justify-content: center;
+}
+.settings-gear:hover { border-color: var(--accent); color: var(--accent); transform: translate(1px,1px); box-shadow: 2px 2px 0 #bbb; }
+.settings-dropdown {
+  display: none; position: absolute; right: 0; top: calc(100% + 6px);
+  background: #fff; border: 2px solid var(--border); border-radius: 3px;
+  box-shadow: 4px 4px 0 #aaa; min-width: 160px; z-index: 200;
+}
+.settings-dropdown.open { display: block; }
+.settings-dropdown button {
+  display: block; width: 100%; text-align: left;
+  padding: 10px 16px; background: none; border: none; border-bottom: 1px solid #eee;
+  cursor: pointer; font-size: 12px; font-weight: 600; color: var(--sub);
+  letter-spacing: .4px; transition: background .1s;
+}
+.settings-dropdown button:last-child { border-bottom: none; }
+.settings-dropdown button:hover { background: #f5fdf7; color: var(--accent); }
+.settings-dropdown .danger:hover { background: #fff5f5; color: #e53935; }
+
+/* AUTH BUTTON */
+.auth-btn {
+  border: 2px solid var(--accent); background: #fff; color: var(--accent);
+  padding: 6px 14px; border-radius: 3px; cursor: pointer; font-size: 11px;
+  font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+  box-shadow: 3px 3px 0 #bbb; transition: all .1s; white-space: nowrap;
+}
+.auth-btn:hover { background: var(--accent); color: #fff; transform: translate(1px,1px); box-shadow: 2px 2px 0 #bbb; }
+.auth-btn.signed-in { border-color: #888; color: #555; }
+.auth-btn.signed-in:hover { background: #e53935; border-color: #e53935; color: #fff; }
+
+/* SIGN-IN MODAL */
+.signin-modal {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  z-index: 1000; align-items: center; justify-content: center;
+}
+.signin-modal.open { display: flex; }
+.signin-box {
+  background: #fff; border: 3px solid var(--border); border-radius: 4px;
+  box-shadow: 6px 6px 0 #aaa; padding: 32px 28px; min-width: 280px; text-align: center;
+}
+.signin-title { font-family: 'Bangers', cursive; font-size: 24px; letter-spacing: 2px; margin-bottom: 6px; }
+.signin-sub { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+.signin-providers { display: flex; flex-direction: column; gap: 10px; }
+.signin-provider-btn {
+  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+  border: 2px solid #ddd; border-radius: 3px; background: #fff;
+  cursor: pointer; font-size: 13px; font-weight: 600; color: #333;
+  box-shadow: 3px 3px 0 #ccc; transition: all .1s;
+}
+.signin-provider-btn:hover { border-color: var(--accent); color: var(--accent); transform: translate(1px,1px); box-shadow: 2px 2px 0 #ccc; }
+.signin-provider-btn svg { flex-shrink: 0; }
+.signin-cancel { margin-top: 16px; font-size: 12px; color: var(--muted); cursor: pointer; background: none; border: none; }
+.signin-cancel:hover { color: #e53935; }
+
 /* CONTAINER */
 .container { max-width: 1200px; margin: 0 auto; padding: 28px 24px; }
 
@@ -307,6 +367,15 @@ body.dark .nav { background: #161b22; border-bottom-color: var(--accent); box-sh
 body.dark .nav-logo { color: #e6edf3; }
 body.dark .reset-btn { background: #21262d; border-color: #30363d; color: #8b949e; box-shadow: 3px 3px 0 #000; }
 body.dark .reset-btn:hover { border-color: #e53935; color: #e53935; box-shadow: 2px 2px 0 #000; }
+body.dark .settings-gear { background: #21262d; border-color: #30363d; color: #8b949e; box-shadow: 3px 3px 0 #000; }
+body.dark .settings-dropdown { background: #161b22; border-color: #30363d; box-shadow: 4px 4px 0 #000; }
+body.dark .settings-dropdown button { color: #8b949e; border-bottom-color: #30363d; }
+body.dark .settings-dropdown button:hover { background: rgba(42,158,82,.15); color: var(--accent); }
+body.dark .settings-dropdown .danger:hover { background: rgba(229,57,53,.1); color: #e53935; }
+body.dark .auth-btn { background: #21262d; box-shadow: 3px 3px 0 #000; }
+body.dark .auth-btn.signed-in { border-color: #30363d; color: #8b949e; }
+body.dark .signin-box { background: #161b22; border-color: #30363d; box-shadow: 6px 6px 0 #000; }
+body.dark .signin-provider-btn { background: #21262d; border-color: #30363d; color: #e6edf3; box-shadow: 3px 3px 0 #000; }
 body.dark .list-tab { background: #161b22; color: #6e7681; border-right-color: var(--accent); }
 body.dark .list-tab:hover:not(.on) { background: rgba(42,158,82,.15); color: var(--accent); }
 body.dark .progress-section { background: #161b22; box-shadow: 5px 5px 0 #000; }
@@ -351,13 +420,37 @@ body.dark #theme-btn { background: #21262d; }
   <div class="nav-right">
     <div class="nav-stats"><b><span id="navDone">0</span>/<span id="navTotal">0</span></b> solved</div>
     <button id="theme-btn" class="reset-btn" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
-    <button class="reset-btn" onclick="doExport()">⬇ Export</button>
-    <button class="reset-btn" onclick="document.getElementById('importFile').click()">⬆ Import</button>
+    <div class="settings-wrap">
+      <button class="settings-gear" onclick="toggleSettings()" title="Settings">&#9881;</button>
+      <div class="settings-dropdown" id="settings-dropdown">
+        <button onclick="doExport();toggleSettings()">⬇ Export</button>
+        <button onclick="document.getElementById('importFile').click();toggleSettings()">⬆ Import</button>
+        <button class="danger" onclick="doReset();toggleSettings()">&#x1F5D1; Reset</button>
+      </div>
+    </div>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="doImport(this)"/>
-    <button class="reset-btn" onclick="doReset()">Reset</button>
-    <button class="reset-btn" id="auth-btn" onclick="toggleAuth()" title="">Sign in</button>
+    <button class="auth-btn" id="auth-btn" onclick="handleAuthClick()" title="">Sign in</button>
   </div>
 </nav>
+
+<!-- Sign-in modal -->
+<div class="signin-modal" id="signin-modal">
+  <div class="signin-box">
+    <div class="signin-title">Sign In</div>
+    <div class="signin-sub">Sync your progress across devices</div>
+    <div class="signin-providers">
+      <button class="signin-provider-btn" onclick="signInWith('google')">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <button class="signin-provider-btn" onclick="signInWith('github')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        Continue with GitHub
+      </button>
+    </div>
+    <button class="signin-cancel" onclick="closeSignIn()">Cancel</button>
+  </div>
+</div>
 
 <div class="container">
   <div class="list-tabs">
@@ -461,26 +554,53 @@ function setupRealtimeSync(uid) {
   });
 }
 
-function toggleAuth() {
+function handleAuthClick() {
   if (currentUser) {
     fbDb.ref('users/' + currentUser.uid).off();
     fbAuth.signOut();
   } else {
-    fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    document.getElementById('signin-modal').classList.add('open');
   }
 }
+
+function signInWith(provider) {
+  closeSignIn();
+  const p = provider === 'github'
+    ? new firebase.auth.GithubAuthProvider()
+    : new firebase.auth.GoogleAuthProvider();
+  fbAuth.signInWithPopup(p);
+}
+
+function closeSignIn() {
+  document.getElementById('signin-modal').classList.remove('open');
+}
+
+function toggleSettings() {
+  document.getElementById('settings-dropdown').classList.toggle('open');
+}
+
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.settings-wrap');
+  if (wrap && !wrap.contains(e.target))
+    document.getElementById('settings-dropdown').classList.remove('open');
+  const modal = document.getElementById('signin-modal');
+  if (modal && e.target === modal) closeSignIn();
+});
 
 fbAuth.onAuthStateChanged(user => {
   currentUser = user;
   const btn = document.getElementById('auth-btn');
   if (!btn) return;
   if (user) {
-    btn.textContent = user.displayName ? user.displayName.split(' ')[0] + ' (sign out)' : 'Sign out';
+    const name = user.displayName ? user.displayName.split(' ')[0] : 'Account';
+    btn.textContent = name + ' (sign out)';
     btn.title = user.email;
+    btn.classList.add('signed-in');
     setupRealtimeSync(user.uid);
   } else {
     btn.textContent = 'Sign in';
     btn.title = '';
+    btn.classList.remove('signed-in');
   }
 });
 // ─────────────────────────────────────────────────────────────────────────
