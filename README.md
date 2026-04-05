@@ -103,4 +103,8 @@ If you plan to publish or fork this project, review the Firebase configuration a
 
 ## License
 
-No license file is currently included in this repository. Add one if you want to define reuse terms explicitly.
+This project is licensed under the GNU Affero General Public License v3.0.
+
+That means people can use, modify, and share it, but if they distribute modified versions or run modified versions for users over a network, they must also make the source code available under the same license.
+
+See [`LICENSE`](/Users/aarsh/Projects/450dsa/LICENSE) for the full text.
