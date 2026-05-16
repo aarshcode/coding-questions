@@ -524,7 +524,10 @@ function doReset() {
   if (!confirm('Reset all progress for this list?')) return;
   progress = {};
   localStorage.setItem(SK + '_' + mode, '{}');
-  syncToFirebase();
+  clearTimeout(syncTimer);
+  if (currentUser) {
+    fbDb.ref('users/' + currentUser.uid + '/' + mode).set('{}');
+  }
   renderMain();
 }
 
@@ -534,7 +537,12 @@ function doResetAll() {
     localStorage.setItem(SK + '_' + sheet.key, '{}');
   });
   progress = {};
-  syncToFirebase();
+  clearTimeout(syncTimer);
+  if (currentUser) {
+    const payload = {};
+    SHEETS.forEach(sheet => { payload[sheet.key] = '{}'; });
+    fbDb.ref('users/' + currentUser.uid).update(payload);
+  }
   renderMain();
 }
 
