@@ -41,7 +41,8 @@
         <button id="theme-toggle-btn" onclick="toggleDark();toggleSettings()">🌙 Light Mode</button>
         <button onclick="doExport();toggleSettings()">⬇ Export</button>
         <button onclick="document.getElementById('importFile').click();toggleSettings()">⬆ Import</button>
-        <button class="danger" onclick="doReset();toggleSettings()">&#x1F5D1; Reset</button>
+        <button class="danger" onclick="doReset();toggleSettings()">&#x1F5D1; Reset Sheet</button>
+        <button class="danger" onclick="doResetAll();toggleSettings()">&#x1F5D1; Reset All Sheets</button>
       </div>
     </div>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="doImport(this)"/>

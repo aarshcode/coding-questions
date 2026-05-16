@@ -528,6 +528,16 @@ function doReset() {
   renderMain();
 }
 
+function doResetAll() {
+  if (!confirm('Reset progress for ALL sheets? This cannot be undone.')) return;
+  SHEETS.forEach(sheet => {
+    localStorage.setItem(SK + '_' + sheet.key, '{}');
+  });
+  progress = {};
+  syncToFirebase();
+  renderMain();
+}
+
 function onGSearch(v) {
   gsearch = v.trim();
   renderProblems();
