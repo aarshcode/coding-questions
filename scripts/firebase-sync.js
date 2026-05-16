@@ -12,6 +12,7 @@ const fbAuth = firebase.auth();
 const fbDb = firebase.database();
 let currentUser = null;
 let syncTimer = null;
+let resetInProgress = false;
 
 function syncToFirebase() {
   if (!currentUser) return;
@@ -31,6 +32,7 @@ function syncToFirebase() {
 
 function setupRealtimeSync(uid) {
   fbDb.ref('users/' + uid).on('value', snap => {
+    if (resetInProgress) return;
     const data = snap.val();
     if (!data) { syncToFirebase(); return; } // first login — push local data up
     let changed = false;

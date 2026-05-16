@@ -526,7 +526,10 @@ function doReset() {
   localStorage.setItem(SK + '_' + mode, '{}');
   clearTimeout(syncTimer);
   if (currentUser) {
-    fbDb.ref('users/' + currentUser.uid + '/' + mode).set('{}');
+    resetInProgress = true;
+    fbDb.ref('users/' + currentUser.uid + '/' + mode).set('{}')
+      .then(() => { resetInProgress = false; })
+      .catch(() => { resetInProgress = false; });
   }
   renderMain();
 }
@@ -539,9 +542,12 @@ function doResetAll() {
   progress = {};
   clearTimeout(syncTimer);
   if (currentUser) {
+    resetInProgress = true;
     const payload = {};
     SHEETS.forEach(sheet => { payload[sheet.key] = '{}'; });
-    fbDb.ref('users/' + currentUser.uid).update(payload);
+    fbDb.ref('users/' + currentUser.uid).update(payload)
+      .then(() => { resetInProgress = false; })
+      .catch(() => { resetInProgress = false; });
   }
   renderMain();
 }
