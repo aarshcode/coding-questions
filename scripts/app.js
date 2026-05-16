@@ -523,7 +523,8 @@ function doReset() {
   }
   if (!confirm('Reset all progress for this list?')) return;
   progress = {};
-  localStorage.removeItem(SK + '_' + mode);
+  localStorage.setItem(SK + '_' + mode, '{}');
+  syncToFirebase();
   renderMain();
 }
 
